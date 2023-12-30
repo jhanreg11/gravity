@@ -47,7 +47,7 @@ const params = {
   delta_t: .05,
   g: 1000, // real value: 6.673e-11
   drag: 0.00,
-  n: 6400,
+  n: 3200,
   fluff: 1/.1,
 };
 const paramsBuffer = device.createBuffer({
@@ -104,7 +104,6 @@ const particlesData = new Float32Array(params.n * PARTICLE_BYTES / 4);
 device.queue.writeBuffer(particlesBuffers[1], 0, particlesData);
 for (let i = 0; i < params.n; i++) {
   let offset = i * PARTICLE_BYTES / 4;
-  console.log(offset)
   let sim_r = Math.min(params.sim_h, params.sim_w) / 2;
   // random pos in circle
   const [x, y] = randPointInCircle(sim_r);
@@ -122,7 +121,6 @@ for (let i = 0; i < params.n; i++) {
   particlesData[offset + 4] = m * 100;
   //radius
   particlesData[offset + 5] = m ** (1 / 3) * 10; 
-  console.log(particlesData[offset + 5])
 }
 device.queue.writeBuffer(particlesBuffers[0], 0, particlesData);
 
@@ -131,7 +129,7 @@ const sharedLayout = device.createBindGroupLayout({
   entries: [
     {
       binding: 0,
-      visibility: GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
+      visibility: GPUShaderStage.FRAGMENT | GPUShaderStage.VERTEX | GPUShaderStage.COMPUTE,
       buffer: {} // shared uniforms
     },
     {

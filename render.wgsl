@@ -31,7 +31,9 @@ struct VertexInput {
 
 struct VertexOutput {
   @builtin(position) position : vec4<f32>,
-  @location(0) particle_position: vec2<f32>,
+  @location(0) quad_pos: vec2<f32>,
+  @location(1) particle_pos: vec2<f32>,
+  @location(2) mass : f32,
 }
 
 @vertex
@@ -42,15 +44,21 @@ fn vs_main(in : VertexInput) -> VertexOutput {
 
   var out : VertexOutput;
   out.position = vec4(position, 0, 1);
-  out.particle_position = particle.position.xy;
+  out.quad_pos = in.pos;
+  out.mass = particle.mass;
+  out.particle_pos = particle.position;
   return out;
 }
 
-
-// FRAGMENT
 @fragment
 fn fs_main(in : VertexOutput) -> @location(0) vec4<f32> {
-  // let c = (in.particle_position.xy + 1) / 2;
-  // return vec4f(c, 1.0 - c.y, 1.0); 
-  return vec4f(1.0, 1.0, 1.0, 1.0);
+  let dist_to_universe_center = length(in.particle_pos);
+  let dist_to_particle_center = length(in.quad_pos);
+  let alpha = 2 * max(.5 - pow(dist_to_particle_center, 2), 0);
+  // Map the distance to the color gradient
+  let color = mix(vec4f(63.0 / 255.0, 94.0 / 255.0, 251.0 / 255.0, alpha),
+                  vec4f(252.0 / 255.0, 70.0 / 255.0, 107.0 / 255.0, alpha),
+                  saturate(dist_to_universe_center / 0.5)); // 0.5 is the radius of the circle
+
+  return color;
 }
