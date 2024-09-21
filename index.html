@@ -3,14 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="./index.js"></script>
+    <title>Gravity</title>
   </head>
   <body style="padding: 0; margin: 0;">
     <div id="app" style="display: flex; flex-direction: column;">
-      <!-- <img src="/flow.webp" style="max-width: 50%; max-height: 100%;" id="img"/> -->
+      <div id="options">
+        <div id="modal-trigger" onclick="showModal()">?</div>
+        <div id="perf">
+          FPS: <div id="FPS"></div>
+        </div>
+      </div>
+      <div id="abt-modal">
+        <div id="exit-btn" onclick="hideModal()">[X]</div>
+        <div id="content">
+          This is a massively parrallel simulation of 10000 particles acting under Newton's law of gravity. It was built using WebGPU.
+        </div>
+      </div>
       <canvas id="canvas"></canvas>
-      FPS: <div id="FPS"></div>
-      ITER: <div id="ITER">0</div>
       <script type="module" src="./main.js"></script>
     </div>
   </body>

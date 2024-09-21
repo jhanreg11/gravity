@@ -229,7 +229,6 @@ const bindGroups = [[0, 1], [1, 0]].map(particlesOrder => device.createBindGroup
 
 function writeStats(timeDiffMs, iter) {
   document.getElementById('FPS').innerHTML = Math.round(1 / timeDiffMs * 1000);
-  document.getElementById('ITER').innerHTML = iter
 }
 
 let last = performance.now();
